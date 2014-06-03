@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Buses CR</title>
+
+	<!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/leaflet.css" />
+
+	<script src="js/leaflet.js"></script>
+
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		html, body, #map {
+			height: 500px;
+		}
+	</style>
+</head>
+<body>
+	
+    <div id="wrapper">
+      
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-brand"><a href="#">Buses CR</a></li>
+          <li><a href="index.html" id="contenido">Próximo Bus</a></li>
+          <li><a href="horarios.html" id="horarios">Horarios</a></li>
+          <li><a href="leaflet-map.html" id="paradas">Paradas</a></li>
+          <li><a href="#" id="acerca">Acerca</a></li>
+        </ul>
+      </div>
+ 
+      <a id="menu-toggle" href="#" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span></a>
+      <!-- Page content -->
+      <div id="page-content-wrapper">
+		<div class="page-content inset">
+          <h1>
+            Paradas
+          </h1>
+          <div class="row">
+            <div id="map" class="col-md-7">
+			</div>
+		</div>
+		</div>
+		</div>
+	</div>
+
+	<script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+	<script>
+		//animation menu
+    	$("#menu-toggle").click(function(e) {
+        	e.preventDefault();
+        	$("#wrapper").toggleClass("active");
+    	});
+
+		var map = L.map('map');
+
+		L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+		}).addTo(map);
+
+		function onLocationFound(e) {
+			var radius = e.accuracy / 2;
+
+			L.marker(e.latlng).addTo(map)
+				.bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+			L.circle(e.latlng, radius).addTo(map);
+		}
+
+		function onLocationError(e) {
+			alert(e.message);
+		}
+
+		map.on('locationfound', onLocationFound);
+		map.on('locationerror', onLocationError);
+
+		map.locate({setView: true, maxZoom: 16});
+	</script>
+</body>
+</html>
+
+
